@@ -54,7 +54,7 @@ The script can run automatically by using cron;
 
 and add the event;
 
-```0 0 * * 1 /your/path/cloudflare-ufw/cloudflare-ufw.sh > /dev/null 2>&1
+```0 0 * * 1 /your/path/cloudflare-ufw/cloudflare-ufw.sh > /dev/null 2>&1```
 
 **OR**
 
