@@ -59,3 +59,12 @@ and add the event;
 **OR**
 
 If using node-red, simply add ```sudo /your/path/cloudflare-ufw/./cloudflare-ufw.sh``` to an 'exec node' and inject it every week.
+
+### Other UFW commands
+
+#### Delete a single rule
+Firstly get a numbered list of all rules  
+```sudo ufw status numbered```
+
+and then delete the rule by number  
+```sudo ufw delete 34```
