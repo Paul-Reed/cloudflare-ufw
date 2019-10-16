@@ -1,22 +1,19 @@
 #!/bin/sh
 
-DIR="$(dirname $(readlink -f $0))"
-cd $DIR
-wget https://www.cloudflare.com/ips-v4 -O ips-v4.tmp
-wget https://www.cloudflare.com/ips-v6 -O ips-v6.tmp
-mv ips-v4.tmp ips-v4
-mv ips-v6.tmp ips-v6
+curl -s https://www.cloudflare.com/ips-v4 -o /tmp/cf_ips
+curl -s https://www.cloudflare.com/ips-v6 >> /tmp/cf_ips
 
-for cfip in `cat ips-v4`; do ufw allow from $cfip; done
-for cfip in `cat ips-v6`; do ufw allow from $cfip; done
+# Allow all traffic from Cloudflare IPs (no ports restriction)
+for cfip in `cat /tmp/cf_ips`; do ufw allow from $cfip comment 'Cloudflare IP'; done
 
 ufw reload > /dev/null
 
 # OTHER EXAMPLE RULES
-# Examples to retrict to port 80
-#for cfip in `cat ips-v4`; do ufw allow from $cfip to any port 80 proto tcp; done
-#for cfip in `cat ips-v6`; do ufw allow from $cfip to any port 80 proto tcp; done
+# Retrict to port 80
+#for cfip in `cat /tmp/cf_ips`; do ufw allow from $cfip to any port 80/tcp comment 'Cloudflare IP'; done
 
-# Examples to restrict to port 443
-#for cfip in `cat ips-v4`; do ufw allow from $cfip to any port 443 proto tcp; done
-#for cfip in `cat ips-v6`; do ufw allow from $cfip to any port 443 proto tcp; done
+# Restrict to port 443
+#for cfip in `cat /tmp/cf_ips`; do ufw allow from $cfip to any port 443/tcp comment 'Cloudflare IP'; done
+
+# Restrict to ports 80 & 443
+#for cfip in `cat /tmp/cf_ips`; do ufw allow from $cfip to any port 80,443/tcp comment 'Cloudflare IP'; done
