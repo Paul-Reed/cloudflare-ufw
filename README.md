@@ -1,70 +1,68 @@
 # cloudflare-ufw
-Script to update UFW with Cloudflare IPs.
+Setup IP Range Cloudflare cho UFW.
 
-### Setup
-Assuming that you already have ufw installed (now a pre-installed package in most linux distros), firstly ensure that ufw is not enabled;
+### Chuẩn bị
+Kiểm tra UFW để chắc chắn UFW chưa được enabled, chạy lệnh sau.
 
 ```sudo ufw status verbose```
 
-If it's not enabled, the response should be ```Status: inactive``` but if not, let's disable it;
+Nếu kết quả trả về là ```Status: inactive``` thì có thể bỏ qua bước này, nếu không hãy chạy lệnh sau.
 
 ```sudo ufw disable```
 
-Clear out any existing rules;
+Chạy lệnh sau để reset UFW rules về mặc định.
 
 ```sudo ufw reset```
 
-and set the default rules to deny incoming and allow outgoing connections;
+Chạy lệnh sau để thiết lập mặc định chặn kết nối đến và cho phép kết nối đi.
 
 ```sudo ufw default deny incoming```  
 ```sudo ufw default allow outgoing```
 
-It's important at this stage to prevent being accidently being locked out of your system by adding 2 rules, before going further.  
-Add a localhost rule;
+Để tránh sự cố xảy ra khi thiết lập, hãy thêm 2 lệnh sau trước khi tiếp tục. Đầu tiên là allow localhost.
 
 ```sudo ufw allow from 192.168.1.0/24```
 
-and also allow SSH access;
+Tiếp theo là allow SSH.
 
 ```sudo ufw allow ssh```
 
-Provided those rules were succesfully added, time to enable your firewall;
+Bây giờ tới lúc enable firewall, chạy lệnh sau.
 
 ```sudo ufw enable```
 
-You will receive a warning that says the "command may disrupt existing ssh connections." We have already set up a firewall rule that allows SSH connections so it should be fine to continue. Respond to the prompt with y.  
-You can run the ```sudo ufw status verbose``` command to see the rules that are set.
+Bạn sẽ nhận được 1 cảnh báo như sau "command may disrupt existing ssh connections." Đây là điều bình thường vì đã allows SSH, nhập Y để tiếp tục. 
+Để kiểm tra trạng thái UFW, chạy lệnh ```sudo ufw status verbose``` .
 
-### Install the script
+### Tiến hành cài đặt
 
-Git clone this repo to your system, and run the bash script in the normal manner;
+Clone repo về máy, upload và chạy script bằng lệnh sau.
 
-```sudo /your/path/cloudflare-ufw/./cloudflare-ufw.sh```
+```sudo /path/to/./cloudflare-ufw.sh```
 
-The script will then download Cloudflare's current v4 & v6 IP's, and install them into ufw's configuration. Check that the rules have been successfuly added; ```sudo ufw status verbose```
+Sript này sẽ tự động tải các dải IPv4 và IPv6 hiện tại và cài đặt vào UFW. Để kiểm tra rules đã được added thành công, chạy lệnh ```sudo ufw status verbose```
 
-### Scheduling
+### Lên lịch cập nhật tự động
 
-Everytime the script is run, it will add any new Cloudflare IP addresses, so consider running the script weekly to ensure that it's kept up to date.  
-The script can run automatically by using cron;
+Cập nhật các dải IP từ Cloudflare hàng tuần. Chạy lệnh sau để mở crontab.
 
 ```sudo crontab -e```
 
-and add the event;
+Thêm dòng sau vào
 
-```0 0 * * 1 /your/path/cloudflare-ufw/cloudflare-ufw.sh > /dev/null 2>&1```
+```0 0 * * 1 /path/to/cloudflare-ufw.sh > /dev/null 2>&1```
 
-**OR**
+**HOẶC**
 
-If using node-red, simply add ```sudo /your/path/cloudflare-ufw/./cloudflare-ufw.sh``` to an 'exec node' and inject it every week.
+Nếu sử dụng node-red, chỉ cần thêm add ```sudo /path/to/cloudflare-ufw/./cloudflare-ufw.sh``` để 'exec node'  và chạy hàng tuần.
 
-### Other UFW commands
+### Các lệnh UFW khác
 
-#### Delete a single rule
-Firstly get a numbered list of all rules  
+#### Xóa từng rule theo number
+Liệt kê danh sách tất cả các rules hiện tại, chạy lệnh.
 ```sudo ufw status numbered```
 
-and then delete the rule by number  
+Xóa rule theo number, ví dụ xóa rule có number bằng 34.
 ```sudo ufw delete 34```
 
-This concept was originally [developed by Leow Kah Man](https://www.leowkahman.com/2016/05/02/automate-raspberry-pi-ufw-allow-cloudflare-inbound/).
+Concept gốc [được phát triển bởi Leow Kah Man](https://www.leowkahman.com/2016/05/02/automate-raspberry-pi-ufw-allow-cloudflare-inbound/).
