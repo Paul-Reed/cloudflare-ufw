@@ -6,7 +6,7 @@ for cfip in `curl -sw '\n' https://www.cloudflare.com/ips-v{4,6}`; do ufw allow 
 ufw reload > /dev/null
 
 # OTHER EXAMPLE RULES
-# Retrict to port 80
+# Restrict to port 80
 #for cfip in `cat /tmp/cf_ips`; do ufw allow proto tcp from $cfip to any port 80 comment 'Cloudflare IP'; done
 
 # Restrict to port 443
