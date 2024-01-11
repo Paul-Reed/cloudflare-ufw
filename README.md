@@ -36,9 +36,13 @@ Bạn sẽ nhận được 1 cảnh báo như sau "command may disrupt existing 
 
 ### Tiến hành cài đặt
 
-Clone repo về máy, upload và chạy script bằng lệnh sau.
+Mở thư mục /root
 
-```sudo /path/to/./cloudflare-ufw.sh```
+```cd /root```
+
+Tự động download, phân quyền và cài đặt
+
+```curl -sO https://raw.githubusercontent.com/Paul-Reed/cloudflare-ufw/master/cloudflare-ufw.sh && chmod +x cloudflare-ufw.sh && ./cloudflare-ufw.sh```
 
 Sript này sẽ tự động tải các dải IPv4 và IPv6 hiện tại và cài đặt vào UFW. Để kiểm tra rules đã được added thành công, chạy lệnh ```sudo ufw status verbose```
 
@@ -50,11 +54,11 @@ Cập nhật các dải IP từ Cloudflare hàng tuần. Chạy lệnh sau để
 
 Thêm dòng sau vào
 
-```0 0 * * 1 /path/to/cloudflare-ufw.sh > /dev/null 2>&1```
+```0 0 * * 1 /root/cloudflare-ufw.sh > /dev/null 2>&1```
 
 **HOẶC**
 
-Nếu sử dụng node-red, chỉ cần thêm add ```sudo /path/to/cloudflare-ufw/./cloudflare-ufw.sh``` để 'exec node'  và chạy hàng tuần.
+Nếu sử dụng node-red, chỉ cần thêm add ```sudo /root/cloudflare-ufw.sh``` để 'exec node'  và chạy hàng tuần.
 
 ### Các lệnh UFW khác
 
